@@ -1,17 +1,24 @@
 //Data itt elérhető
 function done(data) {
     const MOV = JSON.parse(data.responseText); //ha constal használom nem fogom tudni változtatni!
-    console.log(MOV);
-    console.log(sortByTitles(MOV));
+    sortByTitles(MOV);
     setCatNames(MOV);
-    console.log(MOV.movies[0].categories[0])
     createView(MOV);
-    console.log(runTroughElements(MOV.movies[2].categories));
-    let SB = document.querySelector('#searchBar')
-    SB.addEventListener('keyup', function () {
+    let SB = document.querySelector('#searchButtonByTitle')
+    SB.addEventListener('click', function () {
         searchByTitle(MOV); //ez CSAK LET EL működik, var al 48 at kapna mindig (binding)!!!
 
     })
+    let SB2 = document.querySelector('#searchButtonByDirector')
+    SB2.addEventListener('click', function () {
+        searchByDirector(MOV); //ez CSAK LET EL működik, var al 48 at kapna mindig (binding)!!!
+    })
+    let SB3 = document.querySelector('#searchButtonByStar')
+    SB3.addEventListener('click', function () {
+        searchByStar(MOV); //ez CSAK LET EL működik, var al 48 at kapna mindig (binding)!!!
+    })
+
+
     moviesLength(MOV);
 }
 
@@ -94,7 +101,6 @@ function createView(data) {
         img.src = '/img/covers/' + nameToImgName(data.movies[i].title) + '.jpg';
         img.alt = data.movies[i].title;
         img.addEventListener('click', function () {
-            console.log('katty' + [i]); //ez CSAK LET EL működik, var al 48 at kapna mindig (binding)!!!
             showStars(data, i);
         })
         let ul = document.createElement('ul');
@@ -124,14 +130,46 @@ function createView(data) {
 //SearchFuncs
 function searchByTitle(data) {
     let searchBar = document.querySelector('#searchBar');
-    let pickedOut = [];
+    let pickedOut = {
+        movies: []
+    };
     for (let i = 0; i < data.movies.length; i++) {
         if (searchBar.value.toLowerCase() == data.movies[i].title.toLowerCase()) {
-            pickedOut.push(data.movies[i]);
+            pickedOut.movies.push(data.movies[i]);
         }
     }
-    console.log(pickedOut);
-    createView(pickedOut);
+    createView(pickedOut)
+}
+
+//rendező alapján
+function searchByDirector(data) {
+    let searchBar = document.querySelector('#searchBar');
+    let pickedOut = {
+        movies: []
+    };
+    for (let i = 0; i < data.movies.length; i++) {
+        for (let j = 0; j < data.movies[i].directors.length; j++) {
+            if (searchBar.value.toLowerCase() == data.movies[i].directors[j].toLowerCase()) {
+                pickedOut.movies.push(data.movies[i]);
+            }
+        }
+    }
+    createView(pickedOut)
+}
+//Star alapján
+function searchByStar(data) {
+    let searchBar = document.querySelector('#searchBar');
+    let pickedOut = {
+        movies: []
+    };
+    for (let i = 0; i < data.movies.length; i++) {
+        for (let j = 0; j < data.movies[i].cast.length; j++) {
+            if (searchBar.value.toLowerCase() == data.movies[i].cast[j].name.toLowerCase()) {
+                pickedOut.movies.push(data.movies[i]);
+            }
+        }
+    }
+    createView(pickedOut)
 }
 
 //stats
@@ -144,8 +182,6 @@ function moviesLength(data) {
 
     document.querySelector('#totalLength').textContent = `Összes film hossza: ${total.toFixed(2)} perc`
     document.querySelector('#avgLength').textContent = `Átlagos hossz: ${(total / data.movies.length).toFixed(2)} perc`
-    console.log((total / data.movies.length).toFixed(2));
-    console.log(total.toFixed(2));
 
 }
 

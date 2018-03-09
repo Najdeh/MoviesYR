@@ -27,6 +27,20 @@ body {
     border: none;
 }
 
+#searchButtonByTitle,
+#searchButtonByDirector,
+#searchButtonByStar {
+    width: 100px;
+    height: 52px;
+    border-radius: 25px;
+    border: none;
+    background: rgb(240, 212, 141);
+}
+
+#searchButtonByTitle {
+    margin-left: -70px;
+}
+
 .stats {
     position: absolute;
     right: 50px;
@@ -69,6 +83,7 @@ body {
 
 .castDiv h3 {
     margin: 0;
+    margin-bottom: 2%;
     top: 0;
     font-size: 30px;
     text-align: center;
